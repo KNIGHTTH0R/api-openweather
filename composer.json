@@ -1,0 +1,20 @@
+{
+    "name": "sablesoft/api-openweather",
+    "license": "MIT",
+    "description": "A php service for Open Weather API",
+    "authors": [
+        {
+            "name": "Sobol Roman",
+            "email": "sable.lair@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SableSoft\\OpenWeather\\": "src/"
+        }
+    }
+}
