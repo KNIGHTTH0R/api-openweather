@@ -22,11 +22,6 @@ class Request {
     protected $client;
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
      * @var string
      */
     protected $appId;

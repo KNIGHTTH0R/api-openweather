@@ -2,7 +2,6 @@
 
 namespace SableSoft\OpenWeather;
 
-use Exception;
 use GuzzleHttp\Message\ResponseInterface;
 
 /**
@@ -11,7 +10,11 @@ use GuzzleHttp\Message\ResponseInterface;
  */
 class Response {
 
+    const PARAM_ID = 'id';
+    const PARAM_MAIN = 'main';
+    const PARAM_NAME = 'name';
     const PARAM_WEATHER = 'weather';
+    const PARAM_COORDINATES = 'coord';
 
     /**
      * @var ResponseInterface
@@ -24,25 +27,6 @@ class Response {
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
-    }
-
-    /**
-     * Parse out weather data from the response body
-     *
-     * @return array
-     */
-    public function getData() : array
-    {
-        try {
-            $body = $this->getBody();
-
-            if(isset($body[static::PARAM_WEATHER][0])) {
-                return $body[static::PARAM_WEATHER][0];
-            }
-
-        } catch (Exception $e) {}
-
-        return [];
     }
 
     /**
@@ -61,5 +45,56 @@ class Response {
     public function isValid() : bool
     {
         return $this->response->getStatusCode() == 200;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName() : ?string
+    {
+        return $this->getData(static::PARAM_NAME);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getCoordinates() : ?array
+    {
+        return $this->getData(static::PARAM_COORDINATES);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId() : ?int
+    {
+        $id = $this->getData(static::PARAM_ID);
+        return $id ? (int) $id : null;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getWeather() : ?array
+    {
+        return $this->getData(static::PARAM_WEATHER);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getMain() : ?array
+    {
+        return $this->getData(static::PARAM_MAIN);
+    }
+
+    /**
+     * @param string $key
+     * @return mixed|null
+     */
+    public function getData(string $key)
+    {
+        $body = (array) $this->getBody();
+        return $body[$key] ?? null;
     }
 }
